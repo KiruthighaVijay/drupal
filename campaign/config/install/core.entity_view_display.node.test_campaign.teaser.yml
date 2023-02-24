@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.ln_campaign.field_tvc_template
+    - field.field.node.ln_campaign.field_tvccomponents
+    - node.type.ln_campaign
+  module:
+    - user
+id: node.ln_campaign.teaser
+targetEntityType: node
+bundle: ln_campaign
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_tvc_template: true
+  field_tvccomponents: true
