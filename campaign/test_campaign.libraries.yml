@@ -1,0 +1,11 @@
+campaign:
+  version: 1.x
+  css:
+    theme:
+      css/TVC_styles.css: {}
+  dependencies:
+    - core/jquery
+    - core/drupal.ajax
+    - core/drupal
+    - core/drupalSettings
+    - core/jquery.once

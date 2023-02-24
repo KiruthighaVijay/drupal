@@ -1,0 +1,82 @@
+<?php
+
+/**
+ * @file
+ * Module file for the Campaign module.
+ * 
+ * @param $variables
+ * 
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\node\NodeInterface;
+
+/**
+ * Function to set body class based on the template chosen.
+ */
+function ln_campaign_preprocess_html(&$variables) {
+  $node = \Drupal::routeMatch()->getParameter('node');
+  if ($node instanceof NodeInterface) {
+    if ($node->getType() == "ln_campaign") {
+      $variables['#attached']['library'][] =  'ln_campaign/campaign';
+      $body_class = "";
+      switch ($node->get('field_tvc_template')->getString()) {
+        case "trial_npd_set":
+          $body_class = 'TVC-NPD-Typology';
+          break;
+
+        case "trial_npd_alternate":
+          $body_class = 'TVC-NPD-Typology-Alternate';
+          break;
+
+        case "tvc_awareness_typology":
+          $body_class = "TVC-Awareness-Typology";
+          break;
+
+        case "tvc_awareness_typology_alternate":
+          $body_class = "TVC-Awareness-Typology-Alternate";
+          break;
+
+        case "tvc_npd_promotion1":
+          $body_class = "TVC-Promotion-Typology-1";
+          break;
+
+        case "tvc_npd_promotion1_alternate":
+          $body_class = "TVC-Promotion-Typology-1-Alternate";
+          break;
+
+        case "tvc_npd_promotion2":
+          $body_class = "TVC-Promotion-Typology-2";
+          break;
+
+        case "tvc_npd_promotion2_alternate":
+          $body_class = "TVC-Promotion-Typology-2-Alternate";
+          break;
+
+        default:
+          $body_class = "TVC-NPD-Typology";
+      }
+
+      $variables['attributes']['class'][] = $body_class;
+    }
+  }
+}
+
+/**
+ * Implementing Hook form alter.
+ */
+function ln_campaign_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'node_ln_campaign_form') {
+    $form['actions']['submit']['#submit'][] = 'ln_campaign_submit_handler';
+  }
+
+}
+
+/**
+ * Implementing customised submit handler to save Paragraph sets.
+ */
+function ln_campaign_submit_handler($form, FormStateInterface $form_state) {
+  $node = $form_state->getBuildInfo()['callback_object']->getEntity();
+  $node->set('field_tvc_template', $form_state->getValue('field_tvccomponents')['set_selection']['set_selection_select']);
+  $node->save();
+}

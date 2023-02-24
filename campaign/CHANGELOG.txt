@@ -1,0 +1,4 @@
+# Changelog
+
+##Validation
+- Add the component on a page and validate. 
